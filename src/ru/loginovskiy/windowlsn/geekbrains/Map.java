@@ -15,7 +15,7 @@ public class Map extends JPanel
 //    private static final int PLAYENG = 1;
 //    private static final int MENU = 0;
 //    private int gameState;
-    private enum GameState {UNINICIALASED, PLAYING}
+    private enum GameState {UNINICIALASED, PLAYING};
     private GameState gameState =  GameState.UNINICIALASED;
     private final static int EMPTY = 0;
     private final static int USER1 = 1;
@@ -62,6 +62,7 @@ public class Map extends JPanel
 
     protected void startNewGame(int WIDTH, int HEIGHT)
     {
+        gameState=GameState.PLAYING;
         winWidth = WIDTH-5;
         winHeight = HEIGHT - 50;
         field[1][1] = USER1;

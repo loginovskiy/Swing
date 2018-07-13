@@ -6,19 +6,19 @@ import static java.lang.Math.pow;
 
 public class Convert
 {
-    static int num = 15;
-    static byte[] arr = new byte[8];
-    static String[] hexArr = new String[2];
+    static int num = 2147483647;
+    static byte[] arr = new byte[32];
+    static String[] hexArr = new String[8];
     static String[] hexSymbols = {"A","B","C","D","E","F"};
 
     public static void main(String[] args)
     {
         long shift = 1;
         int count = 0;
-        shift<<=7;
+        shift<<=31;
         System.out.println(shift);
         System.out.print("BIN = ");
-        for (int i = 0; i < 8 ; i++)
+        for (int i = 0; i < 32 ; i++)
         {
             if(count == 8)
             {
@@ -67,9 +67,16 @@ public class Convert
         }
         System.out.println();
         System.out.print("HEX = ");
-        for (int i = 0; i < 2; i++)
+        count = 0;
+        for (int i = 0; i < 8; i++)
         {
+            if(count == 2)
+            {
+                System.out.print(" ");
+                count = 0;
+            }
             System.out.print(hexArr[i]);
+            count++;
         }
 
     }
