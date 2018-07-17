@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.Random;
 
 public class Map extends JPanel
 {
@@ -12,6 +13,7 @@ public class Map extends JPanel
     private int widthCell;
     private int heightCell;
     private int[][] field;
+    Random rnd = new Random();
 //    private static final int PLAYENG = 1;
 //    private static final int MENU = 0;
 //    private int gameState;
@@ -65,8 +67,6 @@ public class Map extends JPanel
         gameState=GameState.PLAYING;
         winWidth = WIDTH-5;
         winHeight = HEIGHT - 50;
-        field[1][1] = USER1;
-        field[0][2] = USER2;
         repaint();
     }
 
@@ -76,6 +76,9 @@ public class Map extends JPanel
         x = (int)(e.getX()/(winWidth / (float)widthCell));
         y = (int)(e.getY()/(winHeight / (float)heightCell));
         System.out.println(x+"  "+y);
+        if(!isEmptyCell(y,x))return;
+        field[y][x] = USER1;
+        repaint();
     }
 
     private void drawField(Graphics g)
@@ -102,5 +105,81 @@ public class Map extends JPanel
     private boolean isEmptyCell(int m, int n)
     {
         return field[m][n] == EMPTY;
+    }
+
+    private void aiTern()
+    {
+        int y;
+        int x;
+        int count1,count2;
+        int diagonale = heightCell>widthCell?widthCell:heightCell;
+        for (int i = 0; i <heightCell ; i++)
+        {
+            count1=count2=0;
+            for (int j = 0; j <widthCell ; j++)
+            {
+                if(field[i][j]==EMPTY)count1=0;
+                if(field[i][j]==USER1)
+                {
+                    count1++;
+                    if(count1>1) for (int k = 0; k <widthCell ; k++)
+                    {
+                        if(field[i][k]==EMPTY)
+                        {
+                            field[i][k]=USER2;
+                            return;
+                        }
+                    }
+                }
+                if(field[j][i]==USER1)
+                {
+                    count2++;
+                    if(count2>1) for (int k = 0; k <heightCell ; k++)
+                    {
+                        if(field[k][i]==EMPTY)
+                        {
+                            field[k][i]=USER2;
+                            return;
+                        }
+                    }
+                }
+            }
+        }
+        count1=count2=0;
+        for (int i = 0; i < diagonale ; i++)
+        {
+            if(field[i][i]==EMPTY) count1=count2=0;
+            if(field[i][i]==USER1)
+            {
+                count1++;
+                if(count1>1) for (int j = 0; j < diagonale ; j++)
+                {
+                    if(field[j][j]==EMPTY)
+                    {
+                        field[j][j]=USER2;
+                        return;
+                    }
+                }
+            }
+            if(field[i][((i-(diagonale-1))*(-1))]==USER1)
+            {
+                count2++;
+                if(count2>1) for (int j = 0; j <diagonale ; j++)
+                {
+                    if(field[j][((j-(diagonale-1))*(-1))]==EMPTY)
+                    {
+                        field[j][((j-(diagonale-1))*(-1))]=USER2;
+                        return;
+                    }
+                }
+            }
+        }
+        do
+        {
+            y = rnd.nextInt(heightCell);
+            x = rnd.nextInt(widthCell);
+        }while(field[y][x]!=EMPTY);
+        field[y][x]=USER2;
+        return;
     }
 }
