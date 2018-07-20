@@ -8,25 +8,24 @@ import java.util.Random;
 
 public class Map extends JPanel
 {
-    private int winWidth;
-    private int winHeight;
+    private int WIDTH;
+    private int HEIGHT;
     private int widthCell;
     private int heightCell;
     private int[][] field;
+    private int vinLen;
     Random rnd = new Random();
-//    private static final int PLAYENG = 1;
-//    private static final int MENU = 0;
-//    private int gameState;
     private enum GameState {UNINICIALASED, PLAYING};
     private GameState gameState =  GameState.UNINICIALASED;
     private final static int EMPTY = 0;
     private final static int USER1 = 1;
     private final static int USER2 = 2;
-    Map(int CELL_W, int CELL_H)
+    Map(int CELL_W, int CELL_H, int vinLen)
     {
         setBackground(Color.DARK_GRAY);
         widthCell = CELL_W;
         heightCell = CELL_H;
+        this.vinLen = vinLen;
         field = new int[heightCell][widthCell];
         addMouseListener(new MouseAdapter()
         {
@@ -49,32 +48,33 @@ public class Map extends JPanel
 
     protected void paintMap(Graphics g)
     {
-        float cellWSize = winWidth / (float)widthCell;
-        float cellHSize = winHeight / (float)heightCell;
+        float cellWSize = WIDTH / (float)widthCell;
+        float cellHSize = HEIGHT / (float)heightCell;
         g.setColor(Color.GREEN);
         for (int i = 1; i < widthCell; i++)
         {
-            g.drawLine((int)(cellWSize*i), 0 , (int)(cellWSize*i), winHeight);
+            g.drawLine((int)(cellWSize*i), 0 , (int)(cellWSize*i), HEIGHT);
         }
         for (int i = 1; i < heightCell ; i++)
         {
-            g.drawLine(0, (int)(cellHSize*i), winWidth,(int)(cellHSize*i));
+            g.drawLine(0, (int)(cellHSize*i), WIDTH,(int)(cellHSize*i));
         }
     }
 
     protected void startNewGame(int WIDTH, int HEIGHT)
     {
         gameState=GameState.PLAYING;
-        winWidth = WIDTH-5;
-        winHeight = HEIGHT - 50;
+        this.WIDTH = WIDTH-5;
+        this.HEIGHT = HEIGHT - 50;
         repaint();
     }
 
     void mouseRelease(MouseEvent e)
     {
+        if(gameState!= GameState.PLAYING) return;
         int x,y;
-        x = (int)(e.getX()/(winWidth / (float)widthCell));
-        y = (int)(e.getY()/(winHeight / (float)heightCell));
+        x = (int)(e.getX()/(WIDTH / (float)widthCell));
+        y = (int)(e.getY()/(HEIGHT / (float)heightCell));
         System.out.println(x+"  "+y);
         if(!isEmptyCell(y,x))return;
         field[y][x] = USER1;
@@ -97,14 +97,25 @@ public class Map extends JPanel
                     g.setColor(Color.RED);
                 }
                 else throw new RuntimeException("Неизвестное значение");
-                g.fillOval(j * (int)(winWidth / (float)widthCell),i*(int)(winHeight / (float)heightCell),
-                        (int)(winWidth/ (float)(widthCell)), (int)(winHeight / (float)(heightCell)));
+                g.fillOval(j * (int)(WIDTH / (float)widthCell),i*(int)(HEIGHT / (float)heightCell),
+                        (int)(WIDTH/ (float)(widthCell)), (int)(HEIGHT / (float)(heightCell)));
             }
         }
     }
-    private boolean isEmptyCell(int m, int n)
+    protected boolean isEmptyCell(int m, int n)
     {
         return field[m][n] == EMPTY;
     }
 
+    protected boolean isMapfull()
+    {
+        for (int i = 0; i < heightCell ; i++)
+        {
+            for (int j = 0; j < widthCell ; j++)
+            {
+                if(field[i][j] == EMPTY) return false;
+            }
+        }
+        return true;
+    }
 }

@@ -15,7 +15,7 @@ public class TicTacToe extends JFrame implements ActionListener
     JButton startBtn = new JButton("Start");
     JButton exitBtn = new JButton("Exit");
     JPanel panel = new JPanel(new GridLayout(1,2));
-    Map map = new Map(CELL_W,CELL_H);
+    Map map = new Map(CELL_W,CELL_H, WINLENGTH);
     public static void main(String[] args)
     {
         SwingUtilities.invokeLater(new Runnable()
