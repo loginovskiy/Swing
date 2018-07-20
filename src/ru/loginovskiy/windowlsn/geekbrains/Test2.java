@@ -25,8 +25,8 @@ public class Test2
     public static void main(String[] args)
     {
         map[2][2] = 1;
-        map[2][3] = 1;
-        //map[2][4] = 1;
+        map[3][1] = 1;
+        map[4][0] = 1;
         for (int i = 0; i < HEIGHT ; i++)
         {
             System.out.println();
@@ -44,6 +44,10 @@ public class Test2
         if(checkLine(lastTernX,lastTernY,1,1, WINLEN, targetDot))return true;
         if(checkLine(lastTernX,lastTernY,0,1, WINLEN, targetDot))return true;
         if(checkLine(lastTernX,lastTernY,1,-1, WINLEN, targetDot))return true;
+        if(checkLine(lastTernX,lastTernY,-1,1, WINLEN, targetDot))return true;
+        if(checkLine(lastTernX,lastTernY,-1,-1, WINLEN, targetDot))return true;
+        if(checkLine(lastTernX,lastTernY,-1,0, WINLEN, targetDot))return true;
+        if(checkLine(lastTernX,lastTernY,0,-1, WINLEN, targetDot))return true;
         return false;
     }
     public static boolean checkLine(int x, int y, int vx, int vy, int vlen, int target_dot)
