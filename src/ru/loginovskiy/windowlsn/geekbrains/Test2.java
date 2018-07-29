@@ -25,8 +25,8 @@ public class Test2
     public static void main(String[] args)
     {
         map[2][2] = 1;
+        map[1][3] = 1;
         map[3][1] = 1;
-        map[4][0] = 1;
         for (int i = 0; i < HEIGHT ; i++)
         {
             System.out.println();
@@ -38,16 +38,26 @@ public class Test2
         }
         System.out.println(checkWin(USER_DOT));
     }
+
     public static boolean checkWin(int targetDot)
     {
-        if(checkLine(lastTernX,lastTernY,1,0, WINLEN, targetDot))return true;
-        if(checkLine(lastTernX,lastTernY,1,1, WINLEN, targetDot))return true;
-        if(checkLine(lastTernX,lastTernY,0,1, WINLEN, targetDot))return true;
-        if(checkLine(lastTernX,lastTernY,1,-1, WINLEN, targetDot))return true;
-        if(checkLine(lastTernX,lastTernY,-1,1, WINLEN, targetDot))return true;
-        if(checkLine(lastTernX,lastTernY,-1,-1, WINLEN, targetDot))return true;
-        if(checkLine(lastTernX,lastTernY,-1,0, WINLEN, targetDot))return true;
-        if(checkLine(lastTernX,lastTernY,0,-1, WINLEN, targetDot))return true;
+        System.out.println();
+        for (int i = -1; i < 2 ; i++)
+        {
+            for (int j = -1; j < 2 ; j++)
+            {
+                if(i == 0 & j == 0) continue;
+                if(checkLine(lastTernX,lastTernY, i, j, WINLEN, targetDot))return true;
+            }
+        }
+//            if(checkLine(lastTernX,lastTernY,0,1, WINLEN, targetDot))return true;
+//            if(checkLine(lastTernX,lastTernY,1,1, WINLEN, targetDot))return true;
+//            if(checkLine(lastTernX,lastTernY,0,1, WINLEN, targetDot))return true;
+//            if(checkLine(lastTernX,lastTernY,1,-1, WINLEN, targetDot))return true;
+//            if(checkLine(lastTernX,lastTernY,-1,1, WINLEN, targetDot))return true;
+//            if(checkLine(lastTernX,lastTernY,-1,-1, WINLEN, targetDot))return true;
+//            if(checkLine(lastTernX,lastTernY,-1,0, WINLEN, targetDot))return true;
+//            if(checkLine(lastTernX,lastTernY,0,-1, WINLEN, targetDot))return true;
         return false;
     }
     public static boolean checkLine(int x, int y, int vx, int vy, int vlen, int target_dot)
