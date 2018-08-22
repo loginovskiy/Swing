@@ -6,7 +6,7 @@ public class Test3
     private static final int HEIGHT = 5;
     private static final int WINLEN = 3;
     private static int lastTernX = 2;
-    private static int lastTernY = 2;
+    private static int lastTernY = 0;
     private static final int USER_DOT = 1;
     private static final int AI_DOT = 2;
     private static final int EMPTY = 0;
@@ -25,9 +25,10 @@ public class Test3
 
     public static void main(String[] args)
     {
-        map[2][2] = USER_DOT;
-        map[1][3] = USER_DOT;
-        map[0][4] = USER_DOT;
+        //map[4][0] = USER_DOT;
+        map[0][2] = USER_DOT;
+        //map[1][3] = USER_DOT;
+        map[2][4] = USER_DOT;
         System.out.println(checkWin(USER_DOT));
         showMap();
     }
@@ -50,17 +51,35 @@ public class Test3
         if(checkLine(lastTernX,lastTernY, 1, 0, WINLEN, targetDot))return true;
         if(checkLine(lastTernX,lastTernY, 0, 1, WINLEN, targetDot))return true;
         if(checkDiagonal(lastTernX,lastTernY, 1, 1, WINLEN, targetDot))return true;
-        if(checkDiagonal(lastTernX,lastTernY, -1, 1, WINLEN, targetDot))return true;
+        if(checkDiagonal(lastTernX,lastTernY, 1, -1, WINLEN, targetDot))return true;
         return false;
     }
 
     private static boolean checkLine(int x, int y, int vx, int vy, int len, int dot)
     {
         int counter = 0;
-        int cellX = x * vy;
-        int cellY = y * vx;
-        int length = vy==0?HEIGHT:WIDTH;
-        for (int i = 0; i < length  ; i++)
+        int cellX = x;
+        int cellY = y;
+        int bCell = vy>0?1:0;
+        if (bCell==0)
+        {
+            for (int i = 0; cellX > 0; i++)
+            {
+                cellX = x + i * (-1);
+                cellY = y + i * 0;
+            }
+        }
+        else if (bCell==1)
+        {
+            for (int i = 0; cellY > 0 ; i++)
+            {
+                cellX = x+i*0;
+                cellY = y+i*(-1);
+            }
+
+        }
+
+        for (int i = 0; i < HEIGHT & i < WIDTH ; i++)
         {
             if(map[cellX+i*vx][cellY+i*vy] == dot) counter++;
             else counter = 0;
@@ -72,10 +91,26 @@ public class Test3
     private static boolean checkDiagonal(int x, int y, int vx, int vy, int len, int dot)
     {
         int counter = 0;
-        int cellX=vx>0?x-y:x+y;
-        int cellY=0;
-        int length = vx>0?WIDTH-cellX:HEIGHT-cellY;
-        for (int i = 0; i < length - cellX ; i++)
+        int cellX=x;
+        int cellY=y;
+        int bCell = vy>0?1:-1;
+        if(bCell==1)
+        {
+            for (int i = 0; cellX >0 & cellY>0 ; i++)
+            {
+                cellX = x+i*(-1);
+                cellY = y+i*(-1);
+            }
+        }
+        else if(bCell==(-1))
+        {
+            for (int i = 0; cellX>0 & cellY<HEIGHT; i++)
+            {
+                cellX = x+i*-1;
+                cellY = y+i*1;
+            }
+        }
+        for (int i = 0; cellX+i*vx < WIDTH & cellY+i*vy < HEIGHT; i++)
         {
             if(map[cellY+i*vy][cellX+i*vx] == dot) counter++;
             else counter = 0;
