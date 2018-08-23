@@ -110,11 +110,15 @@ public class Test3
                 cellY = y+i*1;
             }
         }
-        for (int i = 0; cellX+i*vx < WIDTH & cellY+i*vy < HEIGHT; i++)
+        int yc,xc;
+        yc=xc=0;
+        for (int i = 0; (xc < WIDTH & xc >= 0) && (yc < HEIGHT & yc >= 0); i++)
         {
             if(map[cellY+i*vy][cellX+i*vx] == dot) counter++;
             else counter = 0;
             if(counter == len) return true;
+            xc=(cellX+i*vx)+vx;
+            yc=(cellY+i*vy)+vy;
         }
         return false;
     }
