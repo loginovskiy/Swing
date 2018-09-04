@@ -78,6 +78,7 @@ public class Map extends JPanel
         System.out.println(x+"  "+y);
         if(!isEmptyCell(y,x))return;
         field[y][x] = USER1;
+
         repaint();
     }
 

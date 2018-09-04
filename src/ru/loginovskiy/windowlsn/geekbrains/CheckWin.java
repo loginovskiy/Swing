@@ -1,6 +1,6 @@
 package ru.loginovskiy.windowlsn.geekbrains;
 
-public class Test3
+public class CheckWin
 {
     private static final int WIDTH = 5;
     private static final int HEIGHT = 5;
@@ -12,7 +12,7 @@ public class Test3
     private static final int EMPTY = 0;
     public static int[][] map = new int[HEIGHT][WIDTH];
 
-    Test3()
+    CheckWin()
     {
         for (int i = 0; i < HEIGHT ; i++)
         {
@@ -28,8 +28,9 @@ public class Test3
         //map[4][0] = USER_DOT;
         map[0][2] = USER_DOT;
         //map[1][3] = USER_DOT;
-        map[2][4] = USER_DOT;
-        System.out.println(checkWin(USER_DOT));
+        map[0][3] = USER_DOT;
+        //System.out.println(checkWin(USER_DOT));
+        block(USER_DOT);
         showMap();
     }
 
@@ -55,6 +56,13 @@ public class Test3
         return false;
     }
 
+    public static void block(int targetDot)
+    {
+        playerBlockLine(lastTernX, lastTernY, 1, 0, WINLEN, targetDot);
+//        playerBlockLine(lastTernX, lastTernY, 0, 1, WINLEN, targetDot);
+//        playerBlockDiagonale(lastTernX, lastTernY, 1, 1, WINLEN, targetDot);
+//        playerBlockDiagonale(lastTernX, lastTernY, 1, -1, WINLEN, targetDot);
+    }
     private static boolean checkLine(int x, int y, int vx, int vy, int len, int dot)
     {
         int counter = 0;
@@ -110,16 +118,51 @@ public class Test3
                 cellY = y+i*1;
             }
         }
-        int yc,xc;
-        yc=xc=0;
-        for (int i = 0; (xc < WIDTH & xc >= 0) && (yc < HEIGHT & yc >= 0); i++)
+
+        for (int i = 0; ((cellX+i*vx)+vx < WIDTH & (cellX+i*vx)+vx >= 0) && ((cellY+i*vy)+vy < HEIGHT & (cellY+i*vy)+vy >= 0); i++)
         {
             if(map[cellY+i*vy][cellX+i*vx] == dot) counter++;
             else counter = 0;
             if(counter == len) return true;
-            xc=(cellX+i*vx)+vx;
-            yc=(cellY+i*vy)+vy;
         }
         return false;
+    }
+
+    private static void playerBlockLine(int x, int y, int vx, int vy, int len, int dot)
+    {
+        int cellX,vallX;
+        int cellY,vallY;
+        cellX=vallX=x;
+        cellY=vallY=y;
+        if ((vy>0?1:0)==0)
+        {
+            for (int i = 0; cellX > 0; i++)
+            {
+                cellX = x + i * (-1);
+                cellY = y + i * 0;
+            }
+        }
+        else if ((vy>0?1:0)==1)
+        {
+            for (int i = 0; cellY > 0 ; i++)
+            {
+                cellX = x+i*0;
+                cellY = y+i*(-1);
+            }
+        }
+        for(int i=0; i<HEIGHT & i<WIDTH; i++)
+        {
+            if (map[cellY+i*vy][cellX+i*vx]==EMPTY)
+            {
+                map[cellY+i*vy][cellX+i*vx]=USER_DOT;
+                if(checkWin(USER_DOT))
+                {
+                    map[cellY+i*vy][cellX+i*vx]=AI_DOT;
+                    return;
+                }
+                map[cellY+i*vy][cellX+i*vx]=EMPTY;
+            }
+            else continue;
+        }
     }
 }
