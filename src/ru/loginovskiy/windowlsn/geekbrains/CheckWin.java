@@ -27,8 +27,8 @@ public class CheckWin
     {
         //map[4][0] = USER_DOT;
         map[0][2] = USER_DOT;
-        //map[1][3] = USER_DOT;
-        map[0][3] = USER_DOT;
+        //map[0][1] = USER_DOT;
+        map[1][2] = USER_DOT;
         //System.out.println(checkWin(USER_DOT));
         block(USER_DOT);
         showMap();
@@ -59,8 +59,8 @@ public class CheckWin
     public static void block(int targetDot)
     {
         playerBlockLine(lastTernX, lastTernY, 1, 0, WINLEN, targetDot);
-//        playerBlockLine(lastTernX, lastTernY, 0, 1, WINLEN, targetDot);
-//        playerBlockDiagonale(lastTernX, lastTernY, 1, 1, WINLEN, targetDot);
+        playerBlockLine(lastTernX, lastTernY, 0, 1, WINLEN, targetDot);
+        playerBlockDiagonale(lastTernX, lastTernY, 1, 1, WINLEN, targetDot);
 //        playerBlockDiagonale(lastTernX, lastTernY, 1, -1, WINLEN, targetDot);
     }
     private static boolean checkLine(int x, int y, int vx, int vy, int len, int dot)
@@ -89,7 +89,7 @@ public class CheckWin
 
         for (int i = 0; i < HEIGHT & i < WIDTH ; i++)
         {
-            if(map[cellX+i*vx][cellY+i*vy] == dot) counter++;
+            if(map[cellY+i*vy][cellX+i*vx] == dot) counter++;
             else counter = 0;
             if(counter == len) return true;
         }
@@ -130,10 +130,8 @@ public class CheckWin
 
     private static void playerBlockLine(int x, int y, int vx, int vy, int len, int dot)
     {
-        int cellX,vallX;
-        int cellY,vallY;
-        cellX=vallX=x;
-        cellY=vallY=y;
+        int cellX=x;
+        int cellY=y;
         if ((vy>0?1:0)==0)
         {
             for (int i = 0; cellX > 0; i++)
@@ -163,6 +161,31 @@ public class CheckWin
                 map[cellY+i*vy][cellX+i*vx]=EMPTY;
             }
             else continue;
+        }
+    }
+    private static void playerBlockDiagonale(int x, int y, int vx, int vy, int len, int dot)
+    {
+        int cellX=x;
+        int cellY=y;
+        if((vy>0?1:-1)==1)
+        {
+            for (int i = 0; cellX >0 & cellY>0 ; i++)
+            {
+                cellX = x+i*(-1);
+                cellY = y+i*(-1);
+            }
+        }
+        else if((vy>0?1:-1)==(-1))
+        {
+            for (int i = 0; cellX>0 & cellY<HEIGHT; i++)
+            {
+                cellX = x+i*-1;
+                cellY = y+i*1;
+            }
+        }
+        for(int i = 0; ((cellX+i*vx)+vx < WIDTH & (cellX+i*vx)+vx >= 0) && ((cellY+i*vy)+vy < HEIGHT & (cellY+i*vy)+vy >= 0); i++)
+        {
+
         }
     }
 }
