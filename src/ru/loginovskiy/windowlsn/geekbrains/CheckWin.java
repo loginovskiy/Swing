@@ -2,37 +2,35 @@ package ru.loginovskiy.windowlsn.geekbrains;
 
 public class CheckWin
 {
-    private static final int WIDTH = 5;
-    private static final int HEIGHT = 5;
-    private static final int WINLEN = 3;
-    private static int lastTernX = 2;
-    private static int lastTernY = 0;
-    private static final int USER_DOT = 1;
-    private static final int AI_DOT = 2;
-    private static final int EMPTY = 0;
-    public static int[][] map = new int[HEIGHT][WIDTH];
+//    private static final int WIDTH = 5;
+//    private static final int HEIGHT = 5;
+//    private static final int WINLEN = 3;
+//    private static int lastTernX = 0;
+//    private static int lastTernY = 0;
+//    private static final int USER_DOT = 1;
+//    private static final int AI_DOT = 2;
+//    private static final int EMPTY = 0;
+//    public static int[][] map = new int[HEIGHT][WIDTH];
+//
+//    CheckWin()
+//    {
+//        for (int i = 0; i < HEIGHT ; i++)
+//        {
+//            for (int j = 0; j < WIDTH ; j++)
+//            {
+//                map[i][j] = EMPTY;
+//            }
+//        }
+//    }
 
-    CheckWin()
-    {
-        for (int i = 0; i < HEIGHT ; i++)
-        {
-            for (int j = 0; j < WIDTH ; j++)
-            {
-                map[i][j] = EMPTY;
-            }
-        }
-    }
-
-    public static void main(String[] args)
-    {
-        //map[4][0] = USER_DOT;
-        map[0][2] = USER_DOT;
-        //map[0][1] = USER_DOT;
-        map[1][2] = USER_DOT;
-        //System.out.println(checkWin(USER_DOT));
-        block(USER_DOT);
-        showMap();
-    }
+//    public static void main(String[] args)
+//    {
+//        map[0][0] = USER_DOT;
+//        map[2][2] = USER_DOT;
+//        //System.out.println(checkWin(USER_DOT));
+//        block(USER_DOT);
+//        showMap();
+//    }
 
     public static void showMap()
     {
@@ -61,7 +59,7 @@ public class CheckWin
         playerBlockLine(lastTernX, lastTernY, 1, 0, WINLEN, targetDot);
         playerBlockLine(lastTernX, lastTernY, 0, 1, WINLEN, targetDot);
         playerBlockDiagonale(lastTernX, lastTernY, 1, 1, WINLEN, targetDot);
-//        playerBlockDiagonale(lastTernX, lastTernY, 1, -1, WINLEN, targetDot);
+        playerBlockDiagonale(lastTernX, lastTernY, 1, -1, WINLEN, targetDot);
     }
     private static boolean checkLine(int x, int y, int vx, int vy, int len, int dot)
     {
@@ -84,7 +82,6 @@ public class CheckWin
                 cellX = x+i*0;
                 cellY = y+i*(-1);
             }
-
         }
 
         for (int i = 0; i < HEIGHT & i < WIDTH ; i++)
@@ -185,7 +182,17 @@ public class CheckWin
         }
         for(int i = 0; ((cellX+i*vx)+vx < WIDTH & (cellX+i*vx)+vx >= 0) && ((cellY+i*vy)+vy < HEIGHT & (cellY+i*vy)+vy >= 0); i++)
         {
-
+            if (map[cellY+i*vy][cellX+i*vx]==EMPTY)
+            {
+                map[cellY+i*vy][cellX+i*vx]=USER_DOT;
+                if(checkWin(USER_DOT))
+                {
+                    map[cellY+i*vy][cellX+i*vx]=AI_DOT;
+                    return;
+                }
+                map[cellY+i*vy][cellX+i*vx]=EMPTY;
+            }
+            else continue;
         }
     }
 }
