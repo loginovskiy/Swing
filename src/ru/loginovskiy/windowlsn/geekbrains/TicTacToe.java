@@ -12,9 +12,9 @@ public class TicTacToe extends JFrame implements ActionListener
     private final int CELL_W = 3;
     private final int CELL_H = 3;
     private final int WINLENGTH = 3;
-    JButton startBtn = new JButton("Start");
-    JButton exitBtn = new JButton("Exit");
-    JPanel panel = new JPanel(new GridLayout(1,2));
+    private JButton startBtn = new JButton("Start");
+    private JButton exitBtn = new JButton("Exit");
+    private JPanel panel = new JPanel(new GridLayout(1,2));
     Map map = new Map(CELL_W,CELL_H, WINLENGTH);
     public static void main(String[] args)
     {
