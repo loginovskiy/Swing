@@ -12,23 +12,24 @@ public class CheckWin
     private static final int EMPTY = 0;
     public static int[][] map = new int[HEIGHT][WIDTH];
 
-    CheckWin()
-    {
-        for (int i = 0; i < HEIGHT ; i++)
-        {
-            for (int j = 0; j < WIDTH ; j++)
-            {
-                map[i][j] = EMPTY;
-            }
-        }
-    }
+//    CheckWin()
+//    {
+//        for (int i = 0; i < HEIGHT ; i++)
+//        {
+//            for (int j = 0; j < WIDTH ; j++)
+//            {
+//                map[i][j] = EMPTY;
+//            }
+//        }
+//    }
 
     public static void main(String[] args)
     {
         map[0][0] = USER_DOT;
         map[2][2] = USER_DOT;
-        block(USER_DOT);
-        tryToWin(AI_DOT);
+        System.out.println(isMapFull());
+        //block(USER_DOT);
+        //tryToWin(AI_DOT);
         showMap();
     }
 
@@ -203,5 +204,16 @@ public class CheckWin
             }
             else continue;
         }
+    }
+    private static boolean isMapFull()
+    {
+        for (int i = 0; i < HEIGHT ; i++)
+        {
+            for (int j = 0; j < WIDTH ; j++)
+            {
+                if(map[i][j] == EMPTY)return false;
+            }
+        }
+        return true;
     }
 }

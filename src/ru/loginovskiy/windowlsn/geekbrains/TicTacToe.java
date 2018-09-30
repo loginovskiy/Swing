@@ -27,7 +27,7 @@ public class TicTacToe extends JFrame implements ActionListener
             }
         });
     }
-    protected TicTacToe()
+    private TicTacToe()
     {
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setTitle("Крестики-нолики");

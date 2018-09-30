@@ -6,7 +6,7 @@ import static java.lang.Math.pow;
 
 public class Convert
 {
-    static int num = 2201;
+    static int num = 2247564;
     static byte[] arr = new byte[32];
     static String[] hexArr = new String[8];
     static String[] hexSymbols = {"A","B","C","D","E","F"};

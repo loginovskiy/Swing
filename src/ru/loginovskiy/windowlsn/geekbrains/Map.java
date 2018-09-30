@@ -8,18 +8,20 @@ import java.util.Random;
 
 public class Map extends JPanel
 {
-    private int WIDTH;
-    private int HEIGHT;
-    private int widthCell;
-    private int heightCell;
-    private int[][] field;
+    private int WIDTH;                                      //WIDTH - ШИРИНА ИГРОВОГО ПОЛЯ
+    private int HEIGHT;                                     //HEIGHT - ВЫСОТА ИГРОВОГО ПОЛЯ
+    private int widthCell;                                  //widthCell - КОЛЛИЧЕСТВО ГОРИЗОНТАЛЬНЫХ ЯЧЕЕК
+    private int heightCell;                                 //heightCell - КОЛЛИЧЕСТВО ВЕРТИКАЛЬНЫХ ЯЧЕЕК
+    private int[][] field;                                  //field - ДВУМЕРНЫЙ МАССИВ ДЛЯ ИГРОВОГО ПОЛЯ
+    private GameLogical logical;
     private int vinLen;
     Random rnd = new Random();
-    private enum GameState {UNINICIALASED, PLAYING};
+    private enum GameState {UNINICIALASED, PLAYING, WIN_PLAYER1, WIN_PLAYER2, DRAW };
     private GameState gameState =  GameState.UNINICIALASED;
     private final static int EMPTY = 0;
     private final static int USER1 = 1;
     private final static int USER2 = 2;
+
     Map(int CELL_W, int CELL_H, int vinLen)
     {
         setBackground(Color.DARK_GRAY);
@@ -27,6 +29,7 @@ public class Map extends JPanel
         heightCell = CELL_H;
         this.vinLen = vinLen;
         field = new int[heightCell][widthCell];
+        logical = new GameLogical(heightCell, widthCell, vinLen, USER1, USER2, EMPTY, field);
         addMouseListener(new MouseAdapter()
         {
             @Override
@@ -64,6 +67,7 @@ public class Map extends JPanel
     protected void startNewGame(int WIDTH, int HEIGHT)
     {
         gameState=GameState.PLAYING;
+        clearField();
         this.WIDTH = WIDTH-5;
         this.HEIGHT = HEIGHT - 50;
         repaint();
@@ -71,14 +75,27 @@ public class Map extends JPanel
 
     void mouseRelease(MouseEvent e)
     {
-        if(gameState!= GameState.PLAYING) return;
+        if(gameState != GameState.PLAYING) return;
         int x,y;
         x = (int)(e.getX()/(WIDTH / (float)widthCell));
         y = (int)(e.getY()/(HEIGHT / (float)heightCell));
-        System.out.println(x+"  "+y);
+        //System.out.println(x+"  "+y);
         if(!isEmptyCell(y,x))return;
         field[y][x] = USER1;
-
+        repaint();
+        if(logical.checkWin(USER1, x, y))
+        {
+            gameState = GameState.WIN_PLAYER1;
+            System.out.println("Выйгрыш");
+            return;
+        }
+        if(logical.isMapFull())
+        {
+            gameState = GameState.DRAW;
+            System.out.println("Ничья");
+            return;
+        }
+        logical.aiTern(USER2, USER1, 0, 0);
         repaint();
     }
 
@@ -108,15 +125,14 @@ public class Map extends JPanel
         return field[m][n] == EMPTY;
     }
 
-    protected boolean isMapfull()
+    private void clearField()
     {
         for (int i = 0; i < heightCell ; i++)
         {
             for (int j = 0; j < widthCell ; j++)
             {
-                if(field[i][j] == EMPTY) return false;
+                field[i][j] = EMPTY;
             }
         }
-        return true;
     }
 }
