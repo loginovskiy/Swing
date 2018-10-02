@@ -86,7 +86,7 @@ public class Map extends JPanel
         if(logical.checkWin(USER1, x, y))
         {
             gameState = GameState.WIN_PLAYER1;
-            System.out.println("Выйгрыш");
+            System.out.println("Выйгрыш игрок");
             return;
         }
         if(logical.isMapFull())
@@ -95,7 +95,19 @@ public class Map extends JPanel
             System.out.println("Ничья");
             return;
         }
-        logical.aiTern(USER2, USER1, 0, 0);
+        logical.aiTern();
+        if(logical.checkWin(USER2, logical.getLastAiTernX(), logical.getLastAiTernY()))
+        {
+            gameState = GameState.WIN_PLAYER2;
+            System.out.println("Выйгрыш компьютер");
+            return;
+        }
+        if(logical.isMapFull())
+        {
+            gameState = GameState.DRAW;
+            System.out.println("Ничья");
+            return;
+        }
         repaint();
     }
 

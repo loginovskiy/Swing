@@ -10,10 +10,13 @@ public class GameLogical
     private int USER_DOT;
     private int AI_DOT;
     private int EMPTY;
+    private static int lastAiTernY;
+    private static int lastAiTernX;
     private static int blockY;
     private static int blockX;
     public static int[][] map;
     private Random rnd = new Random();
+    private int flag = 0;
 
     GameLogical(int width, int height, int winlen, int user_dot, int ai_dot, int empty, int [][] map)
     {
@@ -101,18 +104,53 @@ public class GameLogical
         return false;
     }
 
-    private boolean opportunityToWin (int dot, int lastAiTernX, int lastAiTernY)
+
+
+
+
+
+
+
+
+    public void aiTern()
     {
-        if(chekWinLine(lastAiTernX,lastAiTernY, 1, 0, WINLEN, dot))return true;
-        if(chekWinLine(lastAiTernX,lastAiTernY, 0, 1, WINLEN, dot))return true;
-//        if(chekWinDiagonale(lastTernX,lastTernY, 1, 1, WINLEN, dot))return true;
-//        if(chekWinDiagonale(lastTernX,lastTernY, 1, -1, WINLEN, dot))return true;
+        if(flag == 0)
+        {
+            rndAiTern(AI_DOT);
+            flag = 1;
+            return;
+        }
+        if(tryToWin()) return;
+        //userBlock();
+        rndAiTern(AI_DOT);
+    }
+
+    private boolean tryToWin()
+    {
+        if(oportunityToWin())
+        {
+            map[lastAiTernY][lastAiTernX] = AI_DOT;
+            return true;
+        }
         return false;
     }
 
-    private boolean chekWinLine(int x, int y, int vx, int vy, int len, int dot)
+    private void userBlock()
     {
-        int counter = 0;
+
+    }
+
+    private boolean oportunityToWin()
+    {
+        if(checkAiLine(lastAiTernX, lastAiTernY, 1, 0, WINLEN, AI_DOT))return true;
+        if(checkAiLine(lastAiTernX, lastAiTernY, 0, 1, WINLEN, AI_DOT))return true;
+        //if(checkAiDiaganale(lastAiTernX,lastAiTernY, 1, 1, WINLEN, AI_DOT)) return true;
+        //if(checkAiDiaganale(lastAiTernX,lastAiTernY, 1, -1, WINLEN, AI_DOT)) return true;
+        return false;
+    }
+
+    private boolean checkAiLine(int x, int y, int vx, int vy, int len, int dot)
+    {
         int cellX = x;
         int cellY = y;
         int bCell = vy>0?1:0;
@@ -134,23 +172,26 @@ public class GameLogical
         }
         for (int i = 0; i <= HEIGHT & i <= WIDTH ; i++)
         {
-            if(map[cellY+i*vy][cellX+i*vx] == EMPTY) map[cellY+i*vy][cellX+i*vx] = AI_DOT;
-            if(checkLine(x, y, 1, 0, WINLEN, dot))
+            if(isEmptyCell(cellY+i*vy, cellX+i*vx)) map[cellY+i*vy][cellX+i*vx] = dot;
+            else continue;
+            if(checkWin(AI_DOT, lastAiTernX, lastAiTernY))
             {
-                blockY=cellY+i*vy;
-                blockX=cellX+i*vx;
+                lastAiTernX = cellX+i*vx;
+                lastAiTernY = cellY+i*vy;
+                map[cellY+i*vy][cellX+i*vx] = EMPTY;
                 return true;
             }
             else map[cellY+i*vy][cellX+i*vx] = EMPTY;
         }
+
         return false;
     }
 
     public boolean isMapFull()
     {
-        for (int i = 0; i < HEIGHT ; i++)
+        for (int i = 0; i <= HEIGHT ; i++)
         {
-            for (int j = 0; j < WIDTH ; j++)
+            for (int j = 0; j <= WIDTH ; j++)
             {
                 if(map[i][j] == EMPTY)return false;
             }
@@ -158,30 +199,30 @@ public class GameLogical
         return true;
     }
 
-    private void rndAiTern(int dot)
+    protected void rndAiTern(int dot)
     {
-        int x,y;
+        int[] tern = new int[2];
         do
         {
-            y = rnd.nextInt(2);
-            x = rnd.nextInt(2);
-        }while(!isEmptyCell(y,x));
-        map[y][x] = dot;
+            tern[0] = rnd.nextInt(2);
+            tern[1] = rnd.nextInt(2);
+        }while(!isEmptyCell(tern[0],tern[1]));
+        lastAiTernY = tern[0];
+        lastAiTernX = tern[1];
+        map[tern[0]][tern[1]] = dot;
+        return;
     }
 
     private boolean isEmptyCell(int y, int x)
     {
-        return map[y][x] == EMPTY;
+        return (map[y][x] == EMPTY);
     }
-
-    public void aiTern(int dot, int edot, int lastAiTernX, int lastAiTernY)
+    public int getLastAiTernY()
     {
-        if(opportunityToWin(dot, lastAiTernX, lastAiTernY))
-        {
-            map[blockY][blockX]=AI_DOT;
-            return;
-        }
-        //if(block(edot, lastTernX, lastTernY))return;
-        rndAiTern(dot);
+        return lastAiTernY;
+    }
+    public int getLastAiTernX()
+    {
+        return lastAiTernX;
     }
 }
