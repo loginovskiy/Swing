@@ -8,6 +8,9 @@ import java.util.Random;
 
 public class Map extends JPanel
 {
+    private static final String DRAW_MSG = "Ничья";
+    private static final String PLAYER_WIN_MSG = "Выйграл игрок";
+    private static final String AI_WIN_MSG = "Выйграл компьютер";
     private int WIDTH;                                      //WIDTH - ШИРИНА ИГРОВОГО ПОЛЯ
     private int HEIGHT;                                     //HEIGHT - ВЫСОТА ИГРОВОГО ПОЛЯ
     private int widthCell;                                  //widthCell - КОЛЛИЧЕСТВО ГОРИЗОНТАЛЬНЫХ ЯЧЕЕК
@@ -47,8 +50,19 @@ public class Map extends JPanel
         if(gameState == GameState.UNINICIALASED) return;
         paintMap(g);
         drawField(g);
+        if(gameState != GameState.PLAYING) showGameOverMsg(g);
     }
 
+    private final Font font = new Font("Times new roman", Font.BOLD, 48);
+    private void showGameOverMsg(Graphics g)
+    {
+        g.setColor(Color.GRAY);
+        g.fillRect(0, 150, WIDTH, 70);
+
+        g.setColor(Color.RED);
+        g.setFont(font);
+        g.drawString("пцпцупц", 30, 200);
+    }
     protected void paintMap(Graphics g)
     {
         float cellWSize = WIDTH / (float)widthCell;
@@ -79,34 +93,30 @@ public class Map extends JPanel
         int x,y;
         x = (int)(e.getX()/(WIDTH / (float)widthCell));
         y = (int)(e.getY()/(HEIGHT / (float)heightCell));
-        //System.out.println(x+"  "+y);
         if(!isEmptyCell(y,x))return;
+        logical.setLastAiTernY(y);
+        logical.setLastTernX(x);
         field[y][x] = USER1;
         repaint();
         if(logical.checkWin(USER1, x, y))
         {
             gameState = GameState.WIN_PLAYER1;
-            System.out.println("Выйгрыш игрок");
             return;
         }
         if(logical.isMapFull())
         {
             gameState = GameState.DRAW;
-            System.out.println("Ничья");
             return;
         }
         logical.aiTern();
         if(logical.checkWin(USER2, logical.getLastAiTernX(), logical.getLastAiTernY()))
         {
             gameState = GameState.WIN_PLAYER2;
-            System.out.println("Выйгрыш компьютер");
             return;
         }
         if(logical.isMapFull())
         {
             gameState = GameState.DRAW;
-            System.out.println("Ничья");
-            return;
         }
         repaint();
     }
