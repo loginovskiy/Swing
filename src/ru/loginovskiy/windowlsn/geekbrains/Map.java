@@ -53,15 +53,26 @@ public class Map extends JPanel
         if(gameState != GameState.PLAYING) showGameOverMsg(g);
     }
 
-    private final Font font = new Font("Times new roman", Font.BOLD, 48);
+    private final Font font = new Font("Times new roman", Font.BOLD, 40);
     private void showGameOverMsg(Graphics g)
     {
         g.setColor(Color.GRAY);
         g.fillRect(0, 150, WIDTH, 70);
 
-        g.setColor(Color.RED);
+        g.setColor(Color.lightGray);
         g.setFont(font);
-        g.drawString("пцпцупц", 30, 200);
+
+        switch (gameState)
+        {
+            case DRAW:
+                g.drawString("Ничья", 137, 195);
+                break;
+            case WIN_PLAYER1:
+                g.drawString("Выйграл игрок", 59, 195);
+                break;
+            case WIN_PLAYER2:
+                g.drawString("Выйграл компьютер", 10, 195);
+        }
     }
     protected void paintMap(Graphics g)
     {
