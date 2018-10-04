@@ -21,6 +21,7 @@ public class Map extends JPanel
     Random rnd = new Random();
     private enum GameState {UNINICIALASED, PLAYING, WIN_PLAYER1, WIN_PLAYER2, DRAW };
     private GameState gameState =  GameState.UNINICIALASED;
+    private static final int DOTS_MARGIN = 4;
     private final static int EMPTY = 0;
     private final static int USER1 = 1;
     private final static int USER2 = 2;
@@ -148,8 +149,8 @@ public class Map extends JPanel
                     g.setColor(Color.RED);
                 }
                 else throw new RuntimeException("Неизвестное значение");
-                g.fillOval(j * (int)(WIDTH / (float)widthCell),i*(int)(HEIGHT / (float)heightCell),
-                        (int)(WIDTH/ (float)(widthCell)), (int)(HEIGHT / (float)(heightCell)));
+                g.fillOval((j * (int)(WIDTH / (float)widthCell)+DOTS_MARGIN),(i*(int)(HEIGHT / (float)heightCell)+DOTS_MARGIN),
+                        (int)((WIDTH/ (float)(widthCell))-DOTS_MARGIN*2), (int)((HEIGHT / (float)(heightCell))-DOTS_MARGIN*2));
             }
         }
     }
